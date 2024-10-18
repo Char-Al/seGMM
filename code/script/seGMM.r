@@ -5,7 +5,7 @@ suppressMessages(library(mclust))
 args <- commandArgs(trailingOnly = TRUE)
 try(if(length(args) != 3) stop("Incorrect number of arguments, usage> Rscript seGMM.R featrue cutoff output"))
 input = args[1]
-threshould = as.numeric(args[2])
+threshold = as.numeric(args[2])
 Output = args[3]
 
 ## read features
@@ -32,7 +32,7 @@ mclust.options("classPlotColors" = cbPalette[-1])
 #plot(drmod, what = "scatterplot")
 #dev.off()
 
-outliers <- em$uncertainty>=threshould
+outliers <- em$uncertainty>=threshold
 
 print(paste("There are ",sum(outliers)," outliers samples based on prediction uncertainty", sep="")); print(rownames(feature)[outliers]); print(table(outliers))
 
@@ -115,7 +115,7 @@ if("Xmap" %in% colnames(feature) & "Ymap" %in% colnames(feature) & nrow(feature[
 }
 
 for(i in 1:nrow(feature)){
-    if(em$uncertainty[i]>=threshould){
+    if(em$uncertainty[i]>=threshold){
         feature$Predict[i] = "NA"
         feature$karyotypes[i] = "NA"
     }

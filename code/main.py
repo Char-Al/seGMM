@@ -227,7 +227,7 @@ def main():
     parser.add_argument("--reference_additional","-r",required = False,help = "Reference file which contain features.")
     parser.add_argument("--uncertain_threshold","-u",required = False,help = "The threshold for detecting outliers in GMM model. [default: 0.1]. The range of threshold is 0-1!",default=0.1)
     parser.add_argument("--num_threshold","-n",required = False,help = "Number of additional threads to use. [default: 1].")
-    parser.add_argument("--Quality","-q",required = False,help = "Mapping quality threshold of reads to count. [default: 30].")
+    parser.add_argument("--quality","-q",required = False,help = "Mapping quality threshold of reads to count. [default: 30].")
     genome="hg19"
     uncertain_threshold="0.1"
     num_threshold="1"
@@ -246,8 +246,8 @@ def main():
             uncertain_threshold=str(args.uncertain_threshold)
         if args.num_threshold:
             num_threshold=str(args.num_threshold)
-        if args.Quality:
-            quality=str(args.Quality)
+        if args.quality:
+            quality=str(args.quality)
         if args.reference_fasta:
             fasta = str(os.path.realpath(args.reference_fasta))
         if (not os.path.isfile(fasta)) and fasta !=" ":

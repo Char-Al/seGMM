@@ -95,7 +95,7 @@ to print a list of all command-line options. If these commands fail with an erro
 |--reference_additional/-r|character|The path of the additional reference file contain features. We have provided two additional files (**1000G.WES.txt and 1000G.WGS.txt in the reference folder**). If **--reference is used, seGMM will automatically calculate the same features in the reference file. The file (tab split) must contain at least two features, and the column names must be: sampleid,XH,Xmap,Ymap,XYratio,SRY. The ordering of the columns is arbitrary, except for the first instance, which must be the sample name** |``false``|
 |--uncertain_threshold/-u|numeric|The threshold for detecting outliers in GMM model. **Default is 0.1. The range of threshold is 0-1.**|``false``|
 |--num_threshold/-n|numeric|Number of additional threads to use. Default is 1.|``false``|
-|--Qulity/-q|numeric|Mapping quality threshold of reads to count. Default is 30.|``false``|
+|--quality/-q|numeric|Mapping quality threshold of reads to count. Default is 30.|``false``|
 
 ## Usage examples
 ```shell
