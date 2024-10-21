@@ -83,7 +83,7 @@ def collect_Xmap(bamfile,fill_type,fasta,quality,num_threshold,outdir):
     if not os.path.exists(outdir+"/"+"Read_stat"):
         os.makedirs(outdir+"/"+"Read_stat")
     if fill_type == "BAM": 
-        cmd="cat " + bamfile + ''' | awk '{print $1"\\n"$2}' | parallel -j ''' + num_threshold +" --max-args 2 samtools view -@ 10 -bh -q " + quality + " {2} X chrX \| samtools flagstat -@ 10 - \>" +outdir+"\/"+"Read_stat"+ "\/{1}.X.stat"
+        cmd="cat " + bamfile + ''' | awk '{print $1"\\n"$2}' | parallel -j ''' + num_threshold +" --max-args 2 samtools view -@ 10 -bh -q " + quality + " {2} X chrX \\| samtools flagstat -@ 10 - \\>" +outdir+"\\/"+"Read_stat"+ "\\/{1}.X.stat"
         runcmd(cmd)
         cmd="cat " + bamfile + ''' | awk '{print $1}' | while read id; do cat ''' + outdir+"/"+"Read_stat/$id.X.stat" + ''' | awk 'BEGIN{OFS="\\t"}NR==9{print "'$id'",$1}' ;done | sort -n -k 1 >'''+outdir+"/Read_stat/Xmap.txt"
         runcmd(cmd)
@@ -93,7 +93,7 @@ def collect_Xmap(bamfile,fill_type,fasta,quality,num_threshold,outdir):
         elif not os.path.isfile(fasta):
             sys.exit('Error, the input reference fasta file is not exist, please check that you have provided the correct path!')
         else:
-            cmd="cat " + bamfile + ''' | awk '{print $1"\\n"$2}' | parallel -j ''' + num_threshold +" --max-args 2 samtools view -@ 10 -bh -q " + quality + " -T " + fasta +" {2} X chrX \| samtools flagstat -@ 10 - \>" +outdir+"\/"+"Read_stat"+ "\/{1}.X.stat"
+            cmd="cat " + bamfile + ''' | awk '{print $1"\\n"$2}' | parallel -j ''' + num_threshold +" --max-args 2 samtools view -@ 10 -bh -q " + quality + " -T " + fasta +" {2} X chrX \\| samtools flagstat -@ 10 - \\>" +outdir+"\\/"+"Read_stat"+ "\\/{1}.X.stat"
             runcmd(cmd)
             cmd="cat " + bamfile + ''' | awk '{print $1}' | while read id; do cat ''' + outdir+"/"+"Read_stat/$id.X.stat" + ''' | awk 'BEGIN{OFS="\\t"}NR==9{print "'$id'",$1}' ;done | sort -n -k 1 >'''+outdir+"/Read_stat/Xmap.txt"
             runcmd(cmd)
@@ -111,7 +111,7 @@ def collect_Ymap(bamfile,fill_type,fasta,quality,num_threshold,outdir):
     if not os.path.exists(outdir+"/"+"Read_stat"):
         os.makedirs(outdir+"/"+"Read_stat")
     if fill_type == "BAM": 
-        cmd="cat " + bamfile + ''' | awk '{print $1"\\n"$2}' | parallel -j ''' + num_threshold +" --max-args 2 samtools view -@ 10 -bh -q " + quality + " {2} Y chrY \| samtools flagstat -@ 10 - \>" +outdir+"/"+"Read_stat"+ "\/{1}.Y.stat"
+        cmd="cat " + bamfile + ''' | awk '{print $1"\\n"$2}' | parallel -j ''' + num_threshold +" --max-args 2 samtools view -@ 10 -bh -q " + quality + " {2} Y chrY \\| samtools flagstat -@ 10 - \\>" +outdir+"/"+"Read_stat"+ "\\/{1}.Y.stat"
         runcmd(cmd)
         cmd="cat " + bamfile + ''' | awk '{print $1}' | while read id; do cat ''' + outdir+"/"+"Read_stat/$id.Y.stat" + ''' | awk 'BEGIN{OFS="\\t"}NR==9{print "'$id'",$1}' ;done | sort -n -k 1 >'''+outdir+"/Read_stat/Ymap.txt"
         runcmd(cmd)
@@ -121,7 +121,7 @@ def collect_Ymap(bamfile,fill_type,fasta,quality,num_threshold,outdir):
         elif not os.path.isfile(fasta):
             sys.exit('Error, the input reference fasta file is not exist, please check that you have provided the correct path!')
         else:
-            cmd="cat " + bamfile + ''' | awk '{print $1"\\n"$2}' | parallel -j ''' + num_threshold +" --max-args 2 samtools view -@ 10 -bh -q " + quality + " -T " + fasta +" {2} Y chrY \| samtools flagstat -@ 10 - \>" +outdir+"\/"+"Read_stat"+ "\/{1}.Y.stat"
+            cmd="cat " + bamfile + ''' | awk '{print $1"\\n"$2}' | parallel -j ''' + num_threshold +" --max-args 2 samtools view -@ 10 -bh -q " + quality + " -T " + fasta +" {2} Y chrY \\| samtools flagstat -@ 10 - \\>" +outdir+"\\/"+"Read_stat"+ "\\/{1}.Y.stat"
             runcmd(cmd)
             cmd="cat " + bamfile + ''' | awk '{print $1}' | while read id; do cat ''' + outdir+"/"+"Read_stat/$id.Y.stat" + ''' | awk 'BEGIN{OFS="\\t"}NR==9{print "'$id'",$1}' ;done | sort -n -k 1 >'''+outdir+"/Read_stat/Ymap.txt"
             runcmd(cmd)
@@ -138,7 +138,7 @@ def collect_total(bamfile,fill_type,fasta,quality,num_threshold,outdir):
     if not os.path.exists(outdir+"/"+"Read_stat"):
         os.makedirs(outdir+"/"+"Read_stat")
     if fill_type == "BAM": 
-        cmd="cat " + bamfile + ''' | awk '{print $1"\\n"$2}' | parallel -j ''' + num_threshold +" --max-args 2 samtools view -@ 10 -bh -q " + quality + " {2} \| samtools flagstat -@ 10 - \>" +outdir+"/"+"Read_stat"+ "\/{1}.total.stat"
+        cmd="cat " + bamfile + ''' | awk '{print $1"\\n"$2}' | parallel -j ''' + num_threshold +" --max-args 2 samtools view -@ 10 -bh -q " + quality + " {2} \\| samtools flagstat -@ 10 - \\>" +outdir+"/"+"Read_stat"+ "\\/{1}.total.stat"
         runcmd(cmd)
         cmd="cat " + bamfile + ''' | awk '{print $1}' | while read id; do cat ''' + outdir+"/"+"Read_stat/$id.total.stat" + ''' | awk 'BEGIN{OFS="\\t"}NR==9{print "'$id'",$1}' ;done | sort -n -k 1 >'''+outdir+"/total.txt"
         runcmd(cmd)
@@ -148,7 +148,7 @@ def collect_total(bamfile,fill_type,fasta,quality,num_threshold,outdir):
         elif not os.path.isfile(fasta):
             sys.exit('Error, the input reference fasta file is not exist, please check that you have provided the correct path!')
         else:
-            cmd="cat " + bamfile + ''' | awk '{print $1"\\n"$2}' | parallel -j ''' + num_threshold +" --max-args 2 samtools view -@ 10 -bh -q " + quality + " -T " + fasta +" {2} \| samtools flagstat -@ 10 - \>" +outdir+"\/"+"Read_stat"+ "\/{1}.total.stat"
+            cmd="cat " + bamfile + ''' | awk '{print $1"\\n"$2}' | parallel -j ''' + num_threshold +" --max-args 2 samtools view -@ 10 -bh -q " + quality + " -T " + fasta +" {2} \\| samtools flagstat -@ 10 - \\>" +outdir+"\\/"+"Read_stat"+ "\\/{1}.total.stat"
             runcmd(cmd)
             cmd="cat " + bamfile + ''' | awk '{print $1}' | while read id; do cat ''' + outdir+"/"+"Read_stat/$id.total.stat" + ''' | awk 'BEGIN{OFS="\\t"}NR==9{print "'$id'",$1}' ;done | sort -n -k 1 >'''+outdir+"/total.txt"
             runcmd(cmd)
