@@ -3,7 +3,7 @@
 # Created Time: 2021-12-13
 # File Name: seGMM
 # Last Change:.
-# Description: a new tool to infer sex from massively parallel sequencing data
+# Description: a tool to infer gender from massively parallel sequencing data
 ############################################################################
 
 import time, os, re, sys, argparse, traceback,subprocess
@@ -196,8 +196,8 @@ def with_reference(feature, input_vcf,bamfile,fill_type,fasta,quality,num_thresh
         runcmd(cmd)
 
 def main():
-    description = "seGMM is a tool to infer gender from massively parallel sequencing data. \n Written by Sihan Liu, liusihan@wchscu.cn. \n Please contact the authors for commercial use. \n Copyright (C) 2021 Institute of rare diseases.\n==============================================================================\n"
-    __version__ = '1.2.6'
+    description = "seGMM is a tool for gender determination from massively parallel sequencing data based on Gaussian mixture model."
+    __version__ = '1.3.0'
     header = "\n"
     header = "*********************************************************************\n"
     header += "* seGMM\n"
