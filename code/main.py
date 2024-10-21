@@ -15,13 +15,13 @@ def sec_to_str(t):
     [d, h, m, s, n] = reduce(lambda ll, b : divmod(ll[0], b) + ll[1:], [(t, 1), 60, 60, 24])
     f = ''
     if d > 0:
-        f += '{D}d:'.format(D=d)
+        f += f'{d}d:'
     if h > 0:
-        f += '{H}h:'.format(H=h)
+        f += f'{h}h:'
     if m > 0:
-        f += '{M}m:'.format(M=m)
+        f += f'{m}m:'
 
-    f += '{S}s'.format(S=s)
+    f += f'{s}s'
     return f
 
 def runcmd(command):
@@ -81,7 +81,7 @@ def collect_XH(input_vcf,outdir):
     xh.close()
     cmd="cat "+ outdir +"/XH.txt "+"| sort -n -k 1 >"+ outdir+"/XH.sorted.txt"
     runcmd(cmd)
-    print('    Finish generate features of X chromosome heterozygosity at {T} \n'.format(T=time.ctime()))
+    print(f'    Finish generate features of X chromosome heterozygosity at {time.ctime()} \n')
 
 def collect_Xmap(bamfile,fill_type,fasta,quality,num_threshold,outdir):
     print(">> Collected feature of X mapping rate")
@@ -109,7 +109,7 @@ def collect_Xmap(bamfile,fill_type,fasta,quality,num_threshold,outdir):
     else:
         cmd = "join " + outdir+"/Read_stat/Xmap.txt " + outdir+"/total.txt" + ''' | awk 'BEGIN{OFS="\\t"}{print $1,$2/$3}' >''' + outdir+"/Xmap.txt"
         runcmd(cmd)
-    print('    Finish generate features of X mapping rate at {T} \n'.format(T=time.ctime()))
+    print(f'    Finish generate features of X mapping rate at {time.ctime()} \n')
 
 def collect_Ymap(bamfile,fill_type,fasta,quality,num_threshold,outdir):
     print(">> Collected feature of Y mapping rate")
@@ -137,7 +137,7 @@ def collect_Ymap(bamfile,fill_type,fasta,quality,num_threshold,outdir):
     else:
         cmd = "join " + outdir+"/Read_stat/Ymap.txt " + outdir+"/total.txt" + ''' | awk 'BEGIN{OFS="\\t"}{print $1,$2/$3}' >''' + outdir+"/Ymap.txt"
         runcmd(cmd)
-    print('    Finish generate features of Y mapping rate at {T} \n'.format(T=time.ctime()))
+    print(f'    Finish generate features of Y mapping rate at {time.ctime()} \n')
 
 def collect_total(bamfile,fill_type,fasta,quality,num_threshold,outdir):
     if not os.path.exists(outdir+"/"+"Read_stat"):
@@ -177,7 +177,7 @@ def collect_SRY(bamfile,fill_type,fasta,quality,genome_version,outdir):
             runcmd(cmd)
             cmd="cat "+bamfile+''' | awk '{print $1}' | while read id; do cat '''+outdir+"/SRY/$id.mosdepth.summary.txt | "+'''awk 'BEGIN{OFS="\\t"}NR==2{out1=$4}NR==3{out2=$4}END{if(out2!=0){print "'$id'",out2}else if(out1!=0){print "'$id'",out1}else{print "'$id'",0}}'; done | sort -n -k 1 >''' + outdir+"/SRY.txt"
             runcmd(cmd)
-    print('    Finish generate features of mean depth of SRY gene at {T} \n'.format(T=time.ctime()))
+    print(f'    Finish generate features of mean depth of SRY gene at {time.ctime()} \n')
 
 
 def with_reference(feature, input_vcf,bamfile,fill_type,fasta,quality,num_threshold,genome_version,outdir):
@@ -206,7 +206,7 @@ def main():
     header = "\n"
     header = "*********************************************************************\n"
     header += "* seGMM\n"
-    header += "* Version {V}\n".format(V=__version__)
+    header += f"* Version {__version__}\n"
     header += "* (C) 2021-2026 Sihan Liu\n"
     header += "* Research Institute of Rare disease / West china hospital\n"
     header += "* GNU General Public License v3\n"
@@ -265,11 +265,11 @@ def main():
             sys.exit('Error, the input bam/cram file is not exist, please check that you have provided the correct path!')
         if not os.path.exists(args.output):
             os.makedirs(args.output)
-            print("Warning, the output file is not exist, seGMM creates the output folder of {s} first!".format(s=args.output))
+            print(f"Warning, the output file is not exist, seGMM creates the output folder of {args.output} first!")
         if os.path.isfile(args.input) and os.path.isfile(args.vcf) and os.path.exists(args.output):
             if args.reference_additional is None:
                 if args.type == "WES" or args.type == "WGS":
-                    print('Beginning to generate features at {T}'.format(T=time.ctime()))
+                    print(f'Beginning to generate features at {time.ctime()}')
                     start_time = time.time()
                     collect_XH(args.vcf,args.output)
                     collect_Xmap(args.input,args.alignment_format,fasta,quality,num_threshold,args.output)
@@ -283,7 +283,7 @@ def main():
                     runcmd(cmd)
                 elif args.type == "TGS":
                     if args.chromosome=="x" and args.SRY!="True":
-                        print('Beginning to generate features at {T}'.format(T=time.ctime()))
+                        print(f'Beginning to generate features at {time.ctime()}')
                         start_time = time.time()
                         collect_XH(args.vcf,args.output)
                         collect_Xmap(args.input,args.alignment_format,fasta,quality,num_threshold,args.output)
@@ -294,7 +294,7 @@ def main():
                         cmd="Rscript "+ str(Path(__file__).absolute().parent)+"/script/seGMM.r " +args.output+"/feature.txt "+str(uncertain_threshold)+" "+args.output
                         runcmd(cmd)
                     elif args.chromosome=="y" and args.SRY=="True":
-                        print('Beginning to generate features at {T}'.format(T=time.ctime()))
+                        print(f'Beginning to generate features at {time.ctime()}')
                         start_time = time.time()
                         collect_Ymap(args.input,args.alignment_format,fasta,quality,num_threshold,args.output)
                         collect_SRY(args.input,args.alignment_format,fasta,quality,genome,args.output)
@@ -307,7 +307,7 @@ def main():
                     elif args.chromosome=="y" and args.SRY=="False":
                         sys.exit('Error, at least 2 features are required by GMM model')
                     elif args.chromosome=="xy" and args.SRY=="False":
-                        print('Beginning to generate features at {T}'.format(T=time.ctime()))
+                        print(f'Beginning to generate features at {time.ctime()}')
                         start_time = time.time()
                         collect_XH(args.vcf,args.output)
                         collect_Xmap(args.input,args.alignment_format,fasta,quality,num_threshold,args.output)
@@ -319,7 +319,7 @@ def main():
                         cmd="Rscript "+ str(Path(__file__).absolute().parent)+"/script/seGMM.r " +args.output+"/feature.txt "+str(uncertain_threshold)+" "+args.output
                         runcmd(cmd)
                     elif args.chromosome=="xy" and args.SRY=="True":
-                        print('Beginning to generate features at {T}'.format(T=time.ctime()))
+                        print(f'Beginning to generate features at {time.ctime()}')
                         start_time = time.time()
                         collect_XH(args.vcf,args.output)
                         collect_Xmap(args.input,args.alignment_format,fasta,quality,num_threshold,args.output)
@@ -363,7 +363,7 @@ def main():
                                 "Error. At least two of features required to be "
                                 "included within reference file if runnning --refenrence.")
                         else:
-                            print('Beginning generate features at {T}'.format(T=time.ctime()))
+                            print(f'Beginning generate features at {time.ctime()}')
                             start_time = time.time()
                             cmd = "cp " + ref + " " + args.output+"/feature.txt"
                             runcmd(cmd)
@@ -413,9 +413,9 @@ def main():
                     else:
                         print("Error, the --chromosome paremeter is not useful with an additional file!")
                         sys.exit()
-        print('\nAnalysis complete for seGMM at {T}'.format(T=time.ctime()))
+        print(f'\nAnalysis complete for seGMM at {time.ctime()}')
         time_elapsed = round(time.time()-start_time,2)
-        print('Total time elapsed: {T} \n'.format(T=sec_to_str(time_elapsed)))
+        print(f'Total time elapsed: {sec_to_str(time_elapsed)} \n')
         print(end)
     except Exception:
         print("Error, please read the protocol of seGMM")
