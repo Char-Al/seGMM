@@ -26,7 +26,9 @@ def sec_to_str(t):
 
 def runcmd(command):
     try:
-        return_info = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        new_env = dict(os.environ)
+        new_env['LC_ALL'] = 'C'
+        return_info = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=new_env)
         error_code = bool(return_info.returncode)
         message = return_info.stdout.decode()
     except Exception as e:
@@ -35,7 +37,7 @@ def runcmd(command):
     finally:
         if error_code:
             print(f"An error occured when running: '{command}'")
-            print("Please check the parameters!")
+            print("Please check parameters!")
             print(message)
             sys.exit()
 
