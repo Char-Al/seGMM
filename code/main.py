@@ -26,15 +26,18 @@ def sec_to_str(t):
 
 def runcmd(command):
     try:
-        return_info = subprocess.run(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
-        if return_info.returncode != 0:
-            print("When running: {cmd}".format(cmd=command))
-            print("An error was occured, please check the parameters!")
-            sys.exit()
+        return_info = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        error_code = bool(return_info.returncode)
+        message = return_info.stdout.decode()
     except Exception as e:
-        print("When running: {cmd}".format(cmd=command))
-        print("An error was occured, please check the parameters!")
-        sys.exit()
+        error_code = True
+        message = e
+    finally:
+        if error_code:
+            print(f"An error occured when running: '{command}'")
+            print("Please check the parameters!")
+            print(message)
+            sys.exit()
 
 def collect_XH(input_vcf,outdir):
     print(">> Collected feature of X chromosome heterozygosity")
@@ -275,7 +278,7 @@ def main():
                     runcmd(cmd)
                     print(">> Running sample classification based on GMM model")
                     cmd="Rscript "+ str(Path(__file__).absolute().parent)+"/script/seGMM.r " +args.output+"/feature.txt "+str(uncertain_threshold)+" "+args.output
-                    subprocess.run(cmd,shell=True)
+                    runcmd(cmd)
                 elif args.type == "TGS":
                     if args.chromosome=="x" and args.SRY!="True":
                         print('Beginning to generate features at {T}'.format(T=time.ctime()))
@@ -287,7 +290,7 @@ def main():
                         runcmd(cmd)
                         print(">> Running sample classification based on GMM model")
                         cmd="Rscript "+ str(Path(__file__).absolute().parent)+"/script/seGMM.r " +args.output+"/feature.txt "+str(uncertain_threshold)+" "+args.output
-                        subprocess.run(cmd,shell=True)
+                        runcmd(cmd)
                     elif args.chromosome=="y" and args.SRY=="True":
                         print('Beginning to generate features at {T}'.format(T=time.ctime()))
                         start_time = time.time()
@@ -298,7 +301,7 @@ def main():
                         runcmd(cmd)
                         print(">> Running sample classification based on GMM model")
                         cmd="Rscript "+ str(Path(__file__).absolute().parent)+"/script/seGMM.r " +args.output+"/feature.txt "+str(uncertain_threshold)+" "+args.output
-                        subprocess.run(cmd,shell=True)
+                        runcmd(cmd)
                     elif args.chromosome=="y" and args.SRY=="False":
                         sys.exit('Error, at least 2 features are required by GMM model')
                     elif args.chromosome=="xy" and args.SRY=="False":
@@ -312,7 +315,7 @@ def main():
                         runcmd(cmd)
                         print(">> Running sample classification based on GMM model")
                         cmd="Rscript "+ str(Path(__file__).absolute().parent)+"/script/seGMM.r " +args.output+"/feature.txt "+str(uncertain_threshold)+" "+args.output
-                        subprocess.run(cmd,shell=True)
+                        runcmd(cmd)
                     elif args.chromosome=="xy" and args.SRY=="True":
                         print('Beginning to generate features at {T}'.format(T=time.ctime()))
                         start_time = time.time()
@@ -325,7 +328,7 @@ def main():
                         runcmd(cmd)
                         print(">> Running sample classification based on GMM model")
                         cmd="Rscript "+ str(Path(__file__).absolute().parent)+"/script/seGMM.r " +args.output+"/feature.txt "+str(uncertain_threshold)+" "+args.output
-                        subprocess.run(cmd,shell=True)
+                        runcmd(cmd)
                     else:
                         print("Please note that you must choices the sex chromosome you want to use and tell seGMM the SRY gene is included in your reference data or not!")
                         sys.exit()
@@ -404,7 +407,7 @@ def main():
                             xh.close()
                         print(">> Running sample classfication based on GMM model")
                         cmd="Rscript "+ str(Path(__file__).absolute().parent)+"/script/seGMM.r " +args.output+"/feature.txt "+str(uncertain_threshold)+" "+args.output
-                        subprocess.run(cmd,shell=True)
+                        runcmd(cmd)
                     else:
                         print("Error, the --chromosome paremeter is not useful with an additional file!")
                         sys.exit()
